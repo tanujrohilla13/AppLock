@@ -120,7 +120,8 @@ fun Activity.showAuthScreen(prefs: Prefs, title: String, subtitle: String, icon:
             setContentView(AuthView(this, prefs, AuthView.Mode.VERIFY, title, subtitle, icon,
                 onSuccess = onSuccess,
                 onForgot = { resetPin(prefs, onSuccess) },
-                onBiometric = if (withBio) ask else null))
+                onBiometric = if (withBio) ask else null,
+                onWrong = { n -> if (n == 3 && Intruder.enabled(this)) Intruder.capture(this) }))
             if (withBio) ask()
         }
     }

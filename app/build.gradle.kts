@@ -11,8 +11,8 @@ android {
         applicationId = "com.tanuj.applock"
         minSdk = 30
         targetSdk = 34
-        versionCode = 2
-        versionName = "2.0"
+        versionCode = 3
+        versionName = "3.0"
     }
 
     // Fixed signing key so every new build installs as an UPDATE (keeps your PIN & locked apps).

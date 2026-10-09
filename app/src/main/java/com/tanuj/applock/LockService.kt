@@ -68,6 +68,7 @@ class LockService : AccessibilityService() {
         }
 
         if (pkg !in prefs.lockedApps) return
+        if (!lockingActive()) return
         val until = unlocked[pkg]
         if (until != null && (until == Long.MAX_VALUE || now < until)) {
             unlocked[pkg] = Long.MAX_VALUE        // still within grace period
@@ -81,6 +82,30 @@ class LockService : AccessibilityService() {
                 putExtra(LockActivity.EXTRA_PKG, pkg)
             })
         }
+    }
+
+    /** Master pause, schedule window and trusted-wifi checks. */
+    private fun lockingActive(): Boolean {
+        if (prefs.protectionPaused) return false
+
+        val start = prefs.scheduleStart; val end = prefs.scheduleEnd
+        if (start >= 0 && end >= 0 && start != end) {
+            val c = java.util.Calendar.getInstance()
+            val mins = c.get(java.util.Calendar.HOUR_OF_DAY) * 60 + c.get(java.util.Calendar.MINUTE)
+            val inWindow = if (start < end) mins in start until end else (mins >= start || mins < end)
+            if (!inWindow) return false
+        }
+
+        val trusted = prefs.trustedWifi
+        if (trusted.isNotEmpty() && currentWifi() == trusted) return false
+        return true
+    }
+
+    private fun currentWifi(): String? {
+        return try {
+            val wm = applicationContext.getSystemService(Context.WIFI_SERVICE) as android.net.wifi.WifiManager
+            wm.connectionInfo?.ssid?.trim('"')?.takeIf { it != "<unknown ssid>" }
+        } catch (e: Exception) { null }
     }
 
     override fun onInterrupt() {}
