@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- White padlock centred in the adaptive-icon safe zone -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <!-- shackle -->
+    <path android:pathData="M43,51V43a11,11 0 0,1 22,0V51"
+        android:strokeColor="#FFFFFF" android:strokeWidth="5.5"
+        android:strokeLineCap="round" android:fillColor="#00000000" />
+    <!-- body with keyhole cut out (evenOdd) -->
+    <path android:fillType="evenOdd" android:fillColor="#FFFFFF"
+        android:pathData="M39,50h30a4,4 0 0,1 4,4v18a4,4 0 0,1 -4,4h-30a4,4 0 0,1 -4,-4v-18a4,4 0 0,1 4,-4z
+                          M54,57.5a3.5,3.5 0 1,0 0.01,0z
+                          M52.6,62h2.8v7h-2.8z" />
+</vector>

@@ -11,12 +11,27 @@ android {
         applicationId = "com.tanuj.applock"
         minSdk = 30
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "2.0"
+    }
+
+    // Fixed signing key so every new build installs as an UPDATE (keeps your PIN & locked apps).
+    // Keep the repo private: anyone with this key could sign an "update" of your app.
+    signingConfigs {
+        create("fixed") {
+            storeFile = file("applock.jks")
+            storePassword = "applock123"
+            keyAlias = "applock"
+            keyPassword = "applock123"
+        }
     }
 
     buildTypes {
-        release { isMinifyEnabled = false }
+        debug { signingConfig = signingConfigs.getByName("fixed") }
+        release {
+            isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("fixed")
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -24,5 +39,3 @@ android {
     }
     kotlinOptions { jvmTarget = "17" }
 }
-// No external libraries: UI is built in code and fingerprint uses the
-// platform BiometricPrompt, so the app stays tiny.
